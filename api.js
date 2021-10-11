@@ -24,6 +24,13 @@ app.post("/participants", (req, res) => {
 	)
 		return res.status(400).send("Usuário já existe!");
 	participants.push(newParticipant);
+	messages.push({
+		from: newParticipant.name,
+		to: "Todos",
+		text: "entra na sala...",
+		type: "status",
+		time: new Date().toLocaleTimeString("pt-br"),
+	});
 	res.status(200).send("Participante adicionado com sucesso!");
 });
 
@@ -48,6 +55,7 @@ app.post("/messages", (req, res) => {
 app.get("/messages", (req, res) => {
 	const visibleMsgs = messages.filter(
 		(message) =>
+			message.type === "status" ||
 			message.type === "message" ||
 			(message.type === "private_message" &&
 				(message.from === req.headers.user || message.to === req.headers.user))
