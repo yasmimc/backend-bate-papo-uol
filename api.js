@@ -46,11 +46,20 @@ app.post("/messages", (req, res) => {
 });
 
 app.get("/messages", (req, res) => {
-	if (req.query.limit && messages.length > req.query.limit)
+	const visibleMsgs = messages.filter(
+		(message) =>
+			message.type === "message" ||
+			(message.type === "private_message" &&
+				(message.from === req.headers.user || message.to === req.headers.user))
+	);
+	if (req.query.limit && visibleMsgs.length > req.query.limit)
 		return res.send(
-			messages.slice(messages.length - req.query.limit - 1, messages.length - 1)
+			visibleMsgs.slice(
+				visibleMsgs.length - req.query.limit - 1,
+				visibleMsgs.length - 1
+			)
 		);
-	res.send(messages);
+	res.send(visibleMsgs);
 });
 
 app.listen(4000);
