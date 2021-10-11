@@ -46,6 +46,10 @@ app.post("/messages", (req, res) => {
 });
 
 app.get("/messages", (req, res) => {
+	if (req.query.limit && messages.length > req.query.limit)
+		return res.send(
+			messages.slice(messages.length - req.query.limit - 1, messages.length - 1)
+		);
 	res.send(messages);
 });
 
