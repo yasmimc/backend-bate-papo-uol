@@ -62,4 +62,17 @@ app.get("/messages", (req, res) => {
 	res.send(visibleMsgs);
 });
 
+app.post("/status", (req, res) => {
+	const user = req.headers.user;
+	participants.map((participant) => {
+		if (participant.name === user)
+			return {
+				...participant,
+				lastStatus: Date.now(),
+			};
+		return participant;
+	});
+	res.status(200).send("participantes atualizados");
+});
+
 app.listen(4000);
