@@ -83,4 +83,20 @@ app.post("/status", (req, res) => {
 	res.status(200).send("participantes atualizados");
 });
 
+setInterval(() => {
+	participants.forEach((participant, index) => {
+		const isActive = (Date.now() - participant.lastStatus) / 1000 <= 10;
+		if (!isActive) {
+			messages.push({
+				from: participant.name,
+				to: "Todos",
+				text: "sai da sala...",
+				type: "status",
+				time: new Date().toLocaleTimeString("pt-br"),
+			});
+			participants.splice(index, 1);
+		}
+	});
+}, 15000);
+
 app.listen(4000);
