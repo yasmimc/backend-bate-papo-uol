@@ -1,6 +1,5 @@
 import express from "express";
 import cors from "cors";
-// import fs from "fs";
 
 const app = express();
 app.use(cors());
@@ -14,9 +13,6 @@ app.post("/participants", (req, res) => {
 		name: req.body.name.trim(),
 		lastStatus: Date.now(),
 	};
-	console.log({ newParticipant });
-	//   const participants = JSON.parse(fs.readFileSync("participants.txt"));
-	//   fs.writeFileSync("participants.txt", JSON.stringify(participants));
 	if (!newParticipant.name || newParticipant.name === "")
 		return res.status(400).send("Nome vazio!");
 	if (
